@@ -22,7 +22,7 @@ class Pages(models.Model):
 
     ID = models.AutoField(primary_key=True)
     Url = models.URLField("url", max_length=2048)
-    SiteID = models.ForeignKey(Sites, on_delete=models.CASCADE, db_column="SiteID")
+    SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
     LastScanDate = models.DateTimeField("last scan date")
 
