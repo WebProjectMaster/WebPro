@@ -16,7 +16,7 @@ class ListCreatePages(generics.ListCreateAPIView):
 
 
 class ListCreatePersons(generics.ListCreateAPIView):
-    queryset = Persons.objects.all()
+    queryset = Keywords.objects.all()
     serializer_class = KeywordsSerializers
 
 
