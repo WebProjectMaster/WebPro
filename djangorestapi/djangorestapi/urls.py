@@ -23,11 +23,22 @@ from restapi.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/persons', ListCreatePersons.as_view(), name = 'list_persons'),
-    url(r'^api/sites', ListCreateSites.as_view(), name = 'list_sites'),
-    url(r'^api/pages', ListCreatePages.as_view(), name = 'list_pages'),
-    url(r'^api/keywords', ListCreateKeywords.as_view(), name = 'list_keywords'),
-    url(r'^api/person_page_rank', ListCreatePersonPageRank, name = 'list_person_page_rank'),
+
+    url(r'^api/persons/$', ListCreatePersons.as_view(), name = 'list_persons'),
+    url(r'^api/persons/(?P<pk>\d+)', ListCreatePerson.as_view(), name = 'list_persons'),
+
+    url(r'^api/sites/$', ListCreateSites.as_view(), name = 'list_sites'),
+    url(r'^api/sites/(?P<pk>\d+)', ListCreateSite.as_view(), name = 'list_sites'),
+
+    url(r'^api/pages/$', ListCreatePages.as_view(), name = 'list_pages'),
+    url(r'^api/pages', ListCreatePage.as_view(), name = 'list_pages'),
+
+    url(r'^api/keywords/$', ListCreateKeywords.as_view(), name = 'list_keywords'),
+    url(r'^api/keywords/(?P<pk>\d+)', ListCreateKeyword.as_view(), name = 'list_keywords'),
+
+    url(r'^api/person_page_rank/$', ListCreatePersonPageRanks, name = 'list_person_page_rank'),
+    url(r'^api/person_page_rank/(?P<pk>\d+)', ListCreatePersonPageRank, name = 'list_person_page_rank'),
+
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
