@@ -24,7 +24,7 @@ class Pages(models.Model):
     Url = models.URLField("url", max_length=2048)
     SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
-    LastScanDate = models.DateTimeField("last scan date")
+    LastScanDate = models.DateTimeField("last scan date", null=True, blank=True)
 
 
 class Persons(models.Model):
