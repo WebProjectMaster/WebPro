@@ -1,15 +1,12 @@
 from rest_framework import serializers
 from .models import Sites, Pages, Persons, Keywords, PersonPageRank
 from django.contrib.auth import get_user_model # If used custom user model
-
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-
 from rest_framework import permissions
 
 
 User = get_user_model()
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -29,6 +26,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
 # Сайты
 class SitesSerializers(serializers.ModelSerializer):
     class Meta:
