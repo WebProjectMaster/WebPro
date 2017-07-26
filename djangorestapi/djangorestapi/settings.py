@@ -135,3 +135,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
+
+# импортируем настройки для разработки из файла "settings_dev.py"
+# из того же каталога, что и файл настроек (возможна перезапись текущих!)
+
+if DEBUG and os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         'settings_dev.py')):
+    # pylint: disable=import-error, wildcard-import, unused-wildcard-import
+    from .settings_dev import *
+    # pylint: enable=all
