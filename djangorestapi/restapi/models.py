@@ -25,7 +25,8 @@ class Pages(models.Model):
 
 
     ID = models.AutoField(primary_key=True)
-    Url = models.URLField("url", max_length=2048)
+    Url = models.URLField("url", max_length=128)
+    Hash_url = models.URLField("url", unique=True, max_length=32)
     SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
     LastScanDate = models.DateTimeField("last scan date", null=True, blank=True)
@@ -69,6 +70,7 @@ class PersonPageRank(models.Model):
     PersonID = models.ForeignKey(Persons, db_column="PersonID")
     PageID = models.ForeignKey(Pages, db_column="PageID")
     Rank = models.IntegerField()
+    Scan_date_datetime = models.DateTimeField("Scan Date Datetime", null=True, blank=True)
 
     def __str__(self):
         return self.PersonID

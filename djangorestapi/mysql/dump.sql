@@ -125,7 +125,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'48474f975022f960bc2afbe49be581e8','2017-07-24 20:51:19.774665',1,'root','','','',1,1,'2017-07-22 23:36:51.774535'),(2,'48474f975022f960bc2afbe49be581e8','2017-07-24 13:14:06.771379',0,'dima','jfj','awalk','wadad@yandex.ru',0,1,'2017-07-24 01:55:37.949785'),(6,'202cb962ac59075b964b07152d234b70','2017-07-24 20:50:39.699103',0,'ddd','awdad','awdad','123213@yandex.ru',0,1,'2017-07-24 20:50:32.227454');
+INSERT INTO `auth_user` VALUES (1,'48474f975022f960bc2afbe49be581e8','2017-07-25 02:02:02.252321',1,'root','','','',1,1,'2017-07-22 23:36:51.774535'),(2,'48474f975022f960bc2afbe49be581e8','2017-07-24 13:14:06.771379',0,'dima','jfj','awalk','wadad@yandex.ru',0,1,'2017-07-24 01:55:37.949785'),(6,'202cb962ac59075b964b07152d234b70','2017-07-24 20:50:39.699103',0,'ddd','awdad','awdad','123213@yandex.ru',0,1,'2017-07-24 20:50:32.227454');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +284,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +293,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2017-07-22 23:32:37.791057'),(2,'auth','0001_initial','2017-07-22 23:32:38.458630'),(3,'admin','0001_initial','2017-07-22 23:32:38.613706'),(4,'admin','0002_logentry_remove_auto_add','2017-07-22 23:32:38.626718'),(5,'contenttypes','0002_remove_content_type_name','2017-07-22 23:32:38.732794'),(6,'auth','0002_alter_permission_name_max_length','2017-07-22 23:32:38.787174'),(7,'auth','0003_alter_user_email_max_length','2017-07-22 23:32:38.853207'),(8,'auth','0004_alter_user_username_opts','2017-07-22 23:32:38.868130'),(9,'auth','0005_alter_user_last_login_null','2017-07-22 23:32:38.924172'),(10,'auth','0006_require_contenttypes_0002','2017-07-22 23:32:38.929161'),(11,'auth','0007_alter_validators_add_error_messages','2017-07-22 23:32:38.943174'),(12,'auth','0008_alter_user_username_max_length','2017-07-22 23:32:39.019171'),(13,'sessions','0001_initial','2017-07-22 23:32:39.060214'),(14,'restapi','0001_initial','2017-07-23 22:29:39.530944'),(15,'authtoken','0001_initial','2017-07-24 00:32:16.111078'),(16,'authtoken','0002_auto_20160226_1747','2017-07-24 00:32:16.224164');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2017-07-22 23:32:37.791057'),(2,'auth','0001_initial','2017-07-22 23:32:38.458630'),(3,'admin','0001_initial','2017-07-22 23:32:38.613706'),(4,'admin','0002_logentry_remove_auto_add','2017-07-22 23:32:38.626718'),(5,'contenttypes','0002_remove_content_type_name','2017-07-22 23:32:38.732794'),(6,'auth','0002_alter_permission_name_max_length','2017-07-22 23:32:38.787174'),(7,'auth','0003_alter_user_email_max_length','2017-07-22 23:32:38.853207'),(8,'auth','0004_alter_user_username_opts','2017-07-22 23:32:38.868130'),(9,'auth','0005_alter_user_last_login_null','2017-07-22 23:32:38.924172'),(10,'auth','0006_require_contenttypes_0002','2017-07-22 23:32:38.929161'),(11,'auth','0007_alter_validators_add_error_messages','2017-07-22 23:32:38.943174'),(12,'auth','0008_alter_user_username_max_length','2017-07-22 23:32:39.019171'),(13,'sessions','0001_initial','2017-07-22 23:32:39.060214'),(14,'restapi','0001_initial','2017-07-23 22:29:39.530944'),(15,'authtoken','0001_initial','2017-07-24 00:32:16.111078'),(16,'authtoken','0002_auto_20160226_1747','2017-07-24 00:32:16.224164'),(17,'restapi','0002_auto_20170728_0058','2017-07-27 21:58:15.705589');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +319,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('tw3j9d7fds5hg8g840kvb4v119u7x3zv','ZDAzNjAyMjViNjMxNjdmM2RiYzJhNDBhZTcyYzk3ZDc2NGRlMTVlZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBiODdhMjU3YjI2YTUxYTg0MzAxMGZlYzgxOWQ0Mzk2OTQxYjQzNTMiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2017-08-07 20:51:19.781671');
+INSERT INTO `django_session` VALUES ('tw3j9d7fds5hg8g840kvb4v119u7x3zv','ZDAzNjAyMjViNjMxNjdmM2RiYzJhNDBhZTcyYzk3ZDc2NGRlMTVlZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBiODdhMjU3YjI2YTUxYTg0MzAxMGZlYzgxOWQ0Mzk2OTQxYjQzNTMiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2017-08-07 20:51:19.781671'),('x0ziaho47hutg62998yyjwhsmdflrk68','OWY1MGE3Zjk3MjNjYTg5N2E3ODkxNzdkN2YwYWRiMGFhNTIzN2RjMDp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIwYjg3YTI1N2IyNmE1MWE4NDMwMTBmZWM4MTlkNDM5Njk0MWI0MzUzIn0=','2017-08-08 02:02:02.262330');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -358,11 +358,13 @@ DROP TABLE IF EXISTS `pages`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pages` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Url` varchar(2048) NOT NULL,
+  `Url` varchar(128) NOT NULL,
   `FoundDateTime` datetime(6) NOT NULL,
   `LastScanDate` datetime(6) DEFAULT NULL,
   `SiteID` int(11) NOT NULL,
+  `Hash_url` varchar(32) NOT NULL,
   PRIMARY KEY (`ID`),
+  UNIQUE KEY `Hash_url` (`Hash_url`),
   KEY `pages_SiteID_98e9f259_fk_sites_ID` (`SiteID`),
   CONSTRAINT `pages_SiteID_98e9f259_fk_sites_ID` FOREIGN KEY (`SiteID`) REFERENCES `sites` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -389,6 +391,7 @@ CREATE TABLE `person_page_rank` (
   `Rank` int(11) NOT NULL,
   `PageID` int(11) NOT NULL,
   `PersonID` int(11) NOT NULL,
+  `Scan_date_datetime` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `person_page_rank_PageID_d0ea7ac6_fk_pages_ID` (`PageID`),
   KEY `person_page_rank_PersonID_e5138c65_fk_persons_ID` (`PersonID`),
@@ -471,4 +474,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-25  0:37:25
+-- Dump completed on 2017-07-28  0:58:45
