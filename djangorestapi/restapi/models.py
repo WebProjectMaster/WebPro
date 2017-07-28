@@ -1,9 +1,8 @@
 """ Модели для WebPro"""
-
-
 from django.db import models
-
-
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 class Sites(models.Model):
     """ Сайты """
 
@@ -42,6 +41,8 @@ class Persons(models.Model):
 
     ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=2048)
+    UserID = models.ForeignKey(User, db_column="username", blank=True)
+
 
     def __str__(self):
         return self.Name
@@ -55,7 +56,8 @@ class Keywords(models.Model):
 
     ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=2048)
-    PersonID = models.ForeignKey(Persons, db_column="PersonID")
+    PersonID = models.ForeignKey(Persons,limit_choices_to={'username': 'UserID'}, db_column="PersonID")
+    UserID = models.ForeignKey(User, db_column="username", blank=True, )
 
     def __str__(self):
         return self.Name

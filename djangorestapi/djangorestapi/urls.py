@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', views.obtain_auth_token),
     url(r'^api/registration/', CreateUserView.as_view(), name = 'registration'),
+    url(r'^api/registration-admin/', AdminRegistration.as_view(), name='registration_admin'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
