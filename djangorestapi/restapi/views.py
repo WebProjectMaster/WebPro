@@ -6,8 +6,8 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser #тут спец методы для доп тз
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -86,13 +86,15 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class ListCreateSites(generics.ListCreateAPIView):
     queryset = Sites.objects.all()
     serializer_class = SitesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
 
 class ListCreateSite(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sites.objects.all()
     serializer_class = SitesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self,*args, **kwargs):
         filter = Sites.objects.filter(ID=self.kwargs['pk'])
@@ -102,13 +104,15 @@ class ListCreateSite(generics.RetrieveUpdateDestroyAPIView):
 class ListCreatePages(generics.ListCreateAPIView):
     queryset = Pages.objects.all()
     serializer_class = PagesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
 
 class ListCreatePage(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pages.objects.all()
     serializer_class = PagesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self,*args, **kwargs):
         filter = Pages.objects.filter(ID=self.kwargs['pk'])
@@ -118,7 +122,8 @@ class ListCreatePage(generics.RetrieveUpdateDestroyAPIView):
 class ListCreatePersons(generics.ListCreateAPIView):
     queryset = Persons.objects.all()
     serializer_class = PersonsSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def perform_create(self, serializer):
         serializer.save(UserID=self.request.user)
@@ -131,7 +136,8 @@ class ListCreatePersons(generics.ListCreateAPIView):
 class ListCreatePerson(generics.RetrieveUpdateDestroyAPIView):
     queryset = Persons.objects.all()
     serializer_class = PersonsSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self,*args, **kwargs):
         filter = Persons.objects.filter(ID=self.kwargs['pk'])
@@ -141,7 +147,8 @@ class ListCreatePerson(generics.RetrieveUpdateDestroyAPIView):
 class ListCreateKeywords(generics.ListCreateAPIView):
     queryset = Keywords.objects.all()
     serializer_class = KeywordsSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def perform_create(self, serializer):
         serializer.save(UserID=self.request.user)
@@ -154,7 +161,8 @@ class ListCreateKeywords(generics.ListCreateAPIView):
 class ListCreateKeyword(generics.RetrieveUpdateDestroyAPIView):
     queryset = Keywords.objects.all()
     serializer_class = KeywordsSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self,*args, **kwargs):
         filter = Keywords.objects.filter(ID=self.kwargs['pk'])
@@ -164,13 +172,15 @@ class ListCreateKeyword(generics.RetrieveUpdateDestroyAPIView):
 class ListCreatePersonPageRanks(generics.ListCreateAPIView):
     queryset = PersonPageRank.objects.all()
     serializer_class = PersonPageRankSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
 
 class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
     queryset = PersonPageRank.objects.all()
     serializer_class = PersonPageRankSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self,*args, **kwargs):
         filter = PersonPageRank.objects.filter(ID=self.kwargs['pk'])
