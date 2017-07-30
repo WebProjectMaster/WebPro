@@ -117,6 +117,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.

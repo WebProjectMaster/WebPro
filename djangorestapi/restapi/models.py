@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -31,16 +32,16 @@ class Pages(models.Model):
     class Meta:
         db_table = "pages"
 
-
     ID = models.AutoField(primary_key=True)
     Url = models.URLField("url", max_length=128)
-    Hash_url = models.URLField("url", unique=True, max_length=32)
+    Hash_url = models.URLField("hash_url", unique=True, max_length=32)
     SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
     LastScanDate = models.DateTimeField("last scan date", null=True, blank=True)
 
     def __str__(self):
         return self.Url
+
 
 class Persons(models.Model):
     """ Личности """
@@ -52,9 +53,9 @@ class Persons(models.Model):
     Name = models.CharField(max_length=2048)
     UserID = models.ForeignKey(User, db_column="username", blank=True)
 
-
     def __str__(self):
         return self.Name
+
 
 
 class Keywords(models.Model):
@@ -65,7 +66,7 @@ class Keywords(models.Model):
 
     ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=2048)
-    PersonID = models.ForeignKey(Persons,limit_choices_to={'username': 'UserID'}, db_column="PersonID")
+    PersonID = models.ForeignKey(Persons, db_column="PersonID")
     UserID = models.ForeignKey(User, db_column="username", blank=True, )
 
     def __str__(self):

@@ -4,7 +4,7 @@ from restapi.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import  include, url
-from restapi.views import *
+
 from rest_framework.authtoken import views
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', views.obtain_auth_token),
     url(r'^api/registration/', CreateUserView.as_view(), name = 'registration'),
+
     url(r'^api/registration-admin/', AdminRegistration.as_view(), name='registration_admin'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
