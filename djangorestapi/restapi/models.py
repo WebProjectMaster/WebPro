@@ -80,7 +80,7 @@ class PersonPageRank(models.Model):
         db_table = "person_page_rank"
 
     PersonID = models.ForeignKey(Persons, db_column="PersonID")
-    PageID = models.ForeignKey(Pages, db_column="PageID")
+    PageID = models.ForeignKey(Pages, db_column="PageID",related_name='page_id')
     Rank = models.IntegerField()
     Scan_date_datetime = models.DateTimeField("Scan Date Datetime", null=True, blank=True)
 
