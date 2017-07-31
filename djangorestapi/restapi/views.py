@@ -15,6 +15,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from django.db.models import Sum
+from rest_framework.compat import is_authenticated
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.db.models import Q
+from django.db.models import Q
 import datetime
 # Create your views here.
 
@@ -127,7 +132,10 @@ class ListCreatePersons(generics.ListCreateAPIView):
         serializer.save(UserID=self.request.user)
 
     def get_queryset(self, *args, **kwargs):
-        filter = Persons.objects.filter(UserID=self.request.user)
+        if self.request.user.is_staff:
+            filter = Persons.objects.all()
+        else:
+            filter = Persons.objects.filter(UserID=self.request.user)
         return filter
 
 
@@ -157,8 +165,10 @@ class ListCreateKeywords(generics.ListCreateAPIView):
         serializer.save(UserID=self.request.user)
 
     def get_queryset(self, *args, **kwargs):
-
-        filter = Keywords.objects.filter(UserID=self.request.user)
+        if self.request.user.is_staff:
+            filter = Keywords.objects.all()
+        else:
+            filter = Keywords.objects.filter(UserID=self.request.user)
         return filter
 
 
@@ -190,7 +200,8 @@ class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get_queryset(self, *args, **kwargs):
-        filter = PersonPageRank.objects.filter(ID=self.kwargs['pk'])
+
+        filter = PersonPageRank.objects.filter(Q(PersonID = self.kwargs['pk'])|Q(PageID = self.kwargs['PageID']))
         return filter
 
 

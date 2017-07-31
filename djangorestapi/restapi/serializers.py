@@ -83,7 +83,7 @@ class KeywordsSerializers(serializers.ModelSerializer):
 class PersonPageRankSerializers(serializers.ModelSerializer):
     class Meta:
         model = PersonPageRank
-        fields = ('PersonID', 'PageID', 'Rank','User')
+        fields = ('PersonID', 'PageID', 'Rank','Scan_date_datetime')
 
 
 
