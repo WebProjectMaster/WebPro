@@ -3,13 +3,19 @@ from .serializers import *
 from django.conf import settings
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from rest_framework.generics import CreateAPIView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from django.db.models import Sum
-import detetime
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.compat import is_authenticated
+import datetime
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
 # Create your views here.
 
 
@@ -188,7 +194,8 @@ class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
         return filter
 
 
-@api_view(['GET',])    
+@api_view(['GET',])
+@permission_classes((permissions.AllowAny,))
 def common_stat(request,site):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
@@ -201,6 +208,7 @@ def common_stat(request,site):
 
 
 @api_view(['GET',])
+@permission_classes((permissions.AllowAny,))
 def period_stat(request,site,person,date_from,date_to):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
