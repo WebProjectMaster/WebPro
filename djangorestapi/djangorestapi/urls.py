@@ -26,8 +26,8 @@ urlpatterns = [
     url(r'^api/person_page_rank/$', ListCreatePersonPageRanks.as_view(), name = 'list_person_page_rank'),
     url(r'^api/person_page_rank/(?P<pk>\d+)', ListCreatePersonPageRank.as_view(), name = 'list_person_page_rank'),
 
-    url(r'^api/stat/common/(?P<site>)\d+$',common_stat, name = 'common_stat'),
-    url(r'^api/stat/period/(?P<site>)\d+/(?P<person>\d+)/(?P<date_from>\d{4}-\d{1,2}-\d{1,2})/(?P<date_to>\d{4}-\d{1,2}-\d{1,2})$', 
+    url(r'^api/stat/common/(?P<site>\d+)$',common_stat, name = 'common_stat'),
+    url(r'^api/stat/period/(?P<site>\d+)/(?P<person>\d+)/(?P<date_from>\d{4}-\d{1,2}-\d{1,2})/(?P<date_to>\d{4}-\d{1,2}-\d{1,2})$', 
                                         period_stat, name = 'period_stat'),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

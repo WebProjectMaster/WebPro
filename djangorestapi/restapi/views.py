@@ -1,3 +1,4 @@
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .serializers import *
 from django.conf import settings
@@ -5,17 +6,16 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
+from rest_framework import status
 from rest_framework.generics import CreateAPIView
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth import get_user_model
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from django.db.models import Sum
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.compat import is_authenticated
 import datetime
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework import permissions
 # Create your views here.
 
 
@@ -194,25 +194,30 @@ class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
         return filter
 
 
-@api_view(['GET',])
-@permission_classes((permissions.AllowAny,))
+@api_view(['GET',])  
+@permission_classes((IsAuthenticated, ))  
 def common_stat(request,site):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
     persons = Persons.objects.all()
-    for person in persons:
-        data[person.Name] = pages.filter(page_id__PersonID=person.pk)\
-                                 .aggregate(Sum('page_id__Rank'))['page_id__Rank__sum']
-    data['last_scan'] = pages.order_by('LastScanDate').last().LastScanDate
+    if pages and persons:
+        for person in persons:
+            data[person.Name] = pages.filter(page_id__PersonID=person.pk)\
+                                     .aggregate(Sum('page_id__Rank'))['page_id__Rank__sum'] or 0
+        data['last_scan'] = pages.order_by('LastScanDate').last().LastScanDate
+    else :
+        return Response(status = status.HTTP_400_BAD_REQUEST)
     return Response(data)
 
 
 @api_view(['GET',])
-@permission_classes((permissions.AllowAny,))
+@permission_classes((IsAuthenticated, ))
 def period_stat(request,site,person,date_from,date_to):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
-    person = Persons.objects.get(pk=person)
+    person = get_object_or_404(Persons,pk=person)
+    if not pages:
+        return Response (status = status.HTTP_400_BAD_REQUEST)
     pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
     date = date_from.split('-')
     date = datetime.date(int(date[0]),int(date[1]),int(date[2]))
