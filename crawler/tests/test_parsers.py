@@ -24,4 +24,4 @@ def describe_parsers_module():
                 words_dict - {"person_id":[words_list]}
                 возвращает словарь {"person_id": "rank"}
             """
-            assert tm.parse_html(page_content, words_dict) == {}
+            assert tm.parse_html(page_content, words_dict) == {'0': 1, '1': 3, '2': 2}

@@ -6,146 +6,118 @@ import re
 import gzip
 import time
 import lxml
+import logging
+import log
 import settings
 import sitemap
 import parsers
+import database
+from robots import RobotsTxt
 
 
 class Crawler:
-    def __init__(self, next_step=False):
+    def __init__(self, next_step=False, max_limit=0):
         """ п.1 в «Алгоритме ...» """
-        print('Crawler.__init__ ...')
-        self.db = settings.DB
-        c = self.db.cursor()
-        c.execute('select s.Name, s.ID '
-                  'from sites s '
-                  'left join pages p on (p.SiteID=s.ID) '
-                  'where p.id is Null')
-        INSERT = 'insert into pages(SiteID, Url, LastScanDate, FoundDateTime) values (%s, %s, %s, %s)'
-        ARGS = [(r[1], '%s/robots.txt' % r[0], None, datetime.datetime.now()) for r in c.fetchall()]
-        c.close()
-        c = self.db.cursor()
-        try:
-            print(ARGS)
-            c.executemany(INSERT, ARGS)
-            self.db.commit()
-        except Exception as e:
-            self.db.rollback()
-            print('Crawler exception 1 ', e, ARGS)
-        c.close()
+        self.max_limit = max_limit
+        self.keywords = database.load_persons()
+        # print('Crawlrer.keywords', self.keywords)
 
-        self.keywords = self.load_persons()
         if next_step:
-            print('Crawler: переходим к шагу 2 ...')
+            # print('Crawler: переходим к шагу 2 ...')
             scan_result = self.scan()
 
-    def load_persons(self):
-        c = self.db.cursor()
-        SELECT = 'select distinct Name, PersonID from keywords'
-        c.execute(SELECT)
-        keywords = {}
-        for n, i in c.fetchall():
-            if not i in keywords.keys():
-                keywords[i] = []
-            keywords[i] += [n, ]
-        c.close()
-        return keywords
+    def _get_content(self, url):
+        # print('%s loading ...', url)
+        logging.info('%s loading ', url)
+        try:
+            rd = urllib.request.urlopen(url)
+        except Exception as e:
+            logging.error('_get_content (%s) exception %s', url, e)
+            return ""
+        charset = rd.headers.get_content_charset('utf-8')
+        logging.debug("_get_content: charset %s", charset)
+        content = ""
+        if url.strip().endswith('.gz'):
+            mem = BytesIO(rd.read())
+            mem.seek(0)
+            f = gzip.GzipFile(fileobj=mem, mode='rb')
+            content = f.read().decode()
+        else:
+            content = rd.read().decode(charset)
 
-    def update_last_scan_date(self, page_id):
-        c = self.db.cursor()
-        c.execute('update pages set LastScanDate=%s where ID=%s',
-                  (datetime.datetime.now(), page_id))
-        self.db.commit()
-        c.close()
+        print('%s loaded ...%s bytes' % (url, len(content)))
+        return content
 
-    def update_person_page_rank(self, page_id, ranks):
-        if ranks:
-            SELECT = 'select id from person_page_rank where PageID=%s and PersonID=%s'
-            UPDATE = 'update person_page_rank set Rank=%s where ID=%s'
-            INSERT = 'insert into person_page_rank (PageID, PersonID, Rank) values (%s, %s, %s)'
-            for person_id, rank in ranks.items():
-                c = self.db.cursor()
-                c.execute(SELECT, (page_id, person_id))
-                rank_id = c.fetchone()
-                c.close()
-                # Реализация INSERT OR UPDATE, т.к. кое кто отказался добавить UNIQUE_KEY :)
-                c = self.db.cursor()
-                if rank_id:
-                    c.execute(UPDATE, (rank, rank_id))
-                else:
-                    c.execute(INSERT, (page_id, person_id, rank))
-                self.db.commit()
-                c.close()
+    def _is_robot_txt(self, url):
+        return url.upper().endswith('ROBOTS.TXT')
+
+    def process_ranks(self, content, page_id):
+        logging.debug('process_ranks: %s', content)
+        ranks = parsers.parse_html(content, self.keywords)
+        logging.debug('process_ranks: %s', ranks)
+        database.update_person_page_rank(page_id, ranks)
+        database.update_last_scan_date(page_id)
+        return ranks
+
+    def process_robots(self):
+        """
+            Производит обработку файлов robots.txt
+            - добавляет в базу новые файлы robots
+            - создает объекты из файлов robots.txt, 
+              которые умеют проверять ссылки и содежрат sitemaps
+            - возвращает словарь site_id : RobotsTxt
+            - если robots.txt не содержит sitemap то подставляется индекс страница
+        """
+        result = {}
+        database.add_robots()
+        robots_rows = database.get_robots()
+        for robots in robots_rows:
+            page_id, url, site_id, base_url = robots
+            request_time = time.time()
+            logging.info('#BEGIN %s url %s, base_url %s', page_id, url, base_url)
+            robots_file = RobotsTxt(url)
+            robots_file.read()
+            result[site_id] = robots_file
+            urls = robots_file.sitemaps
+            if urls == []:
+                urls.append(base_url)
+            urls_count = sitemap.add_urls(urls, robots, sitemap.SM_TYPE_TXT)
+            request_time = time.time() - request_time
+            logging.info('#END url %s, base_url %s, add urls %s, time %s',
+                         url, base_url, urls_count, request_time)
+        return result
 
     def scan(self):
-        SELECT = 'select distinct p.id, p.Url, p.SiteID, s.Name '\
-                 'from pages p '\
-                 'join sites s on (s.ID=p.SiteID) '\
-                 'where p.LastScanDate is null'
-        c = self.db.cursor()
-        c.execute(SELECT)
-        pages = c.fetchall()
-        c.close()
-        rows = 0
-        for row in pages:
-            rows += 1
-            print(row)
-            page_id, url, site_id, base_url = row
-            url = ('http://' + url) if not (url.startswith('http://') or url.startswith('https://')) else url
-            urls = []
+        all_robots = self.process_robots()
+        pages = database.get_pages_rows(None)
+        # TODO: добавить проверку если len(pages) = 0 то найти наименьшую дату и выбрать по ней.
+        add_urls_total = 0
+        # print('Crawler.scan: pages=%s' % len(pages))
+        for page in pages:
+            page_id, url, site_id, base_url = page
             request_time = time.time()
-            try:
-                # print('Загрузка', url)
-                rd = urllib.request.urlopen(url)
-            except Exception as e:
-                print('Crawler.scan (%s) exception %s' % (url, e))
+            logging.info('#BEGIN %s url %s, base_url %s', page_id, url, base_url)
+            content = self._get_content(url)
+            robots = all_robots.get(site_id)
+
+            if add_urls_total >= self.max_limit:
+                page_type = sitemap.get_file_type(content)
+                add_urls_count = 0
             else:
-                try:
-                    if not url.strip().endswith('.gz'):
-                        rd = rd.read()
-                    else:
-                        """
-                            sitemap.xml.gz
-                        """
-                        mem = BytesIO(rd.read())
-                        mem.seek(0)
-                        f = gzip.GzipFile(fileobj=mem, mode='rb')
-                        rd = f.read()
-                except Exception as e:
-                    print('Crowlrer.read exception', e, url)
-                else:
-                    if url.upper().endswith('ROBOTS.TXT'):
-                        urls, sitemaps = list({r for r in re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', rd.decode())}), []
-                    else:
-                        try:
-                            urls, sitemaps = sitemap.get_urls(rd.decode(), base_url)
-                            rd = rd.decode()
-                        except Exception as e:
-                            print(base_url, rd[:20], ' ... ', rd[-20:], e)
-                            urls, sitemaps = [], []
-                        else:
-                            if sitemap._get_sitemap_type(rd.split('\n')[0]) == sitemap.SM_TYPE_HTML:
-                                print('Crawler.html.parsing ...')
-                                ranks = parsers.parse_html(rd, self.keywords)
-                                print('Crawler:', ranks)
-                                self.update_person_page_rank(page_id, ranks)
-                    urls += sitemaps
-                    urls = [(site_id, u, datetime.datetime.now(), None) for u in urls if url]
-                    # print('Crawler: urls %s' % urls)
-                    INSERT = 'insert into pages (SiteID, Url, FoundDateTime, LastScanDate) values (%s, %s, %s, %s)'
-                    c = self.db.cursor()
-                    c.executemany(INSERT, urls)
-                    self.db.commit()
-                    c.close()
-                    self.update_last_scan_date(page_id)
+                page_type, add_urls_count = sitemap.scan_urls(content, page, robots)
+
+            if page_type == sitemap.SM_TYPE_HTML:
+                self.process_ranks(content, page_id)
+
             request_time = time.time() - request_time
-        return rows
+            logging.info('#END url %s, base_url %s, add urls %s, time %s',
+                         url, base_url, add_urls_count, request_time)
+            add_urls_total = add_urls_total + add_urls_count
 
-    def fresh(self):
-        SELECT = ''
-
+        logging.info('Crawler.scan: Add %s new urls on date %s', add_urls_total, 'NULL')
+        return add_urls_total, len(pages)
 
 if __name__ == '__main__':
-    c = Crawler()
+    c = Crawler(max_limit=50000)
+    logger = logging.getLogger()
     c.scan()
-    c.fresh()
