@@ -1,0 +1,1 @@
+INSERT INTO `persons` VALUES (1,'Путин'),(2,'Навальный');
