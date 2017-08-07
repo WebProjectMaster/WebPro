@@ -9,11 +9,22 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name',)
+        fields = ('id', 'username', 'password', 'password_confirm', 'email', 'first_name', 'last_name',)
         write_only_fields = ('password',)
         read_only_fields = ('id',)
 
+    password_confirm = serializers.CharField(label='Подтверждение пароля', style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(label='Пароль', style={'input_type': 'password'})
+
+    def validate(self, validated_data):
+        if validated_data['password'] != validated_data['password_confirm']:
+            raise serializers.ValidationError('Пароли не совпадают!')
+
+        return validated_data
+
     def create(self, validated_data):
+        validated_data.pop('password_confirm', None)
+
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
@@ -31,11 +42,22 @@ class UserSerializer(serializers.ModelSerializer):
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name', 'is_superuser', 'is_staff')
+        fields = ('id', 'username', 'password', 'password_confirm', 'email', 'first_name', 'last_name', 'is_superuser', 'is_staff')
         write_only_fields = ('password',)
         read_only_fields = ('id',)
 
+    password_confirm = serializers.CharField(label='Подтверждение пароля', style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(label='Пароль', style={'input_type': 'password'})
+
+    def validate(self, validated_data):
+        if validated_data['password'] != validated_data['password_confirm']:
+            raise serializers.ValidationError('Пароли не совпадают!')
+
+        return validated_data
+
     def create(self, validated_data):
+        validated_data.pop('password_confirm', None)
+
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
