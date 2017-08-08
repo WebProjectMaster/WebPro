@@ -1,0 +1,6 @@
+
+djangorestapi/project_uwsgi\.ini
+
+djangorestapi/uwsgi_params
+
+djangorestapi/project_nginx\.conf

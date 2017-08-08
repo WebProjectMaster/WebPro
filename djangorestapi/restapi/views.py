@@ -198,6 +198,7 @@ class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PersonPageRankSerializers
     permission_classes = (IsAdminUser,)
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    lookup_field = 'PersonID'
 
     def get_queryset(self, *args, **kwargs):
 
@@ -243,3 +244,6 @@ def period_stat(request,site,person,date_from,date_to):
         date += datetime.timedelta(days=1)
     data['new_pages'] = new_pages
     return Response(data)
+
+
+

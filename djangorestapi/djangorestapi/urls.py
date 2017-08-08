@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from restapi.views import *
+from restapi.Authtoken import *
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,14 +25,14 @@ urlpatterns = [
     url(r'^api/keywords/(?P<pk>\d+)', ListCreateKeyword.as_view(), name = 'list_keywords'),
 
     url(r'^api/person_page_rank/$', ListCreatePersonPageRanks.as_view(), name = 'list_person_page_rank'),
-    url(r'^api/person_page_rank/(?P<pk>\d+)/(?P<PageID>\d+)', ListCreatePersonPageRank.as_view(), name = 'list_person_page_rank'),
+    url(r'^api/person_page_rank/(?P<PersonID>\d+)/(?P<PageID>\d+)', ListCreatePersonPageRank.as_view(), name = 'list_person_page_rank'),
 
     url(r'^api/stat/common/(?P<site>\d+)$',common_stat, name = 'common_stat'),
     url(r'^api/stat/period/(?P<site>\d+)/(?P<person>\d+)/(?P<date_from>\d{4}-\d{1,2}-\d{1,2})/(?P<date_to>\d{4}-\d{1,2}-\d{1,2})$', 
                                         period_stat, name = 'period_stat'),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api-token-auth/', views.obtain_auth_token),
+    url(r'^api-token-auth/', ObtainAuthToken.as_view()),
     url(r'^api/registration/', CreateUserView.as_view(), name = 'registration'),
 
     url(r'^api/registration-admin/', AdminRegistration.as_view(), name='registration_admin'),

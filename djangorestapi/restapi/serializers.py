@@ -7,11 +7,37 @@ User = get_user_model()
 
 # Регистрация обычного пользователя
 class UserSerializer(serializers.ModelSerializer):
+    email2 = serializers.EmailField(label ='Email address')
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'password_confirm', 'email', 'first_name', 'last_name',)
         write_only_fields = ('password',)
         read_only_fields = ('id',)
+
+    def validate_email2(self, value):
+        data = self.get_initial()
+        email = self.context['request'].POST['email']
+        print(email)
+        email2 = value
+        if email != email2:
+            raise serializers.ValidationError('Email не совпадают')
+        user_email = User.objects.filter(email = email)
+        if user_email.exists():
+            raise serializers.ValidationError('Данные имел уже зарегистрирован')
+
+        return value
+
+    def validate_email(self, value):
+        data = self.get_initial()
+        email = value
+        email2 = data.get('email')
+        if email != email2:
+            raise serializers.ValidationError('Email не совпадают')
+        user_email = User.objects.filter(email = email)
+        if user_email.exists():
+            raise serializers.ValidationError('Данные имел уже зарегистрирован')
+
+        return value
 
     password_confirm = serializers.CharField(label='Подтверждение пароля', style={'input_type': 'password'}, write_only=True)
     password = serializers.CharField(label='Пароль', style={'input_type': 'password'})
@@ -96,6 +122,10 @@ class PersonsSerializers(serializers.ModelSerializer):
 
 # Ключевые слова
 class KeywordsSerializers(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super(KeywordsSerializers, self).__init__(*args, **kwargs)
+        self.fields['PersonID'].queryset = Persons.objects.filter(UserID=self.context['request'].user)
+
     class Meta:
         model = Keywords
         fields = ('ID', 'Name','PersonID')

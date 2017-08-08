@@ -13,6 +13,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
+
 class Sites(models.Model):
     """ Сайты """
 
