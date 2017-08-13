@@ -13,6 +13,5 @@ from crawlers import Crawler
 
 
 if __name__ == '__main__':
-    c = Crawler()
+    c = Crawler(max_limit=10)
     c.scan()
-    c.fresh()
