@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from restapi.views import *
-from restapi.Authtoken import *
+from restapi.authtoken import *
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -33,9 +33,11 @@ urlpatterns = [
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', ObtainAuthToken.as_view()),
-    url(r'^api/registration/', CreateUserView.as_view(), name = 'registration'),
 
+    url(r'^api/registration/', CreateUserView.as_view(), name = 'registration'),
     url(r'^api/registration-admin/', AdminRegistration.as_view(), name='registration_admin'),
+
+    url(r'^api/user/(?P<username>\w+)$', UserInfo.as_view(), name = 'user_info'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

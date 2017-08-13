@@ -1,28 +1,21 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .serializers import *
-from django.conf import settings
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
-from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from rest_framework import permissions
 from django.db.models import Sum
-from rest_framework.compat import is_authenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.db.models import Q
-from django.db.models import Q
 import datetime
+from .permission import *
 # Create your views here.
-
+from django.contrib.auth.hashers import  UnsaltedMD5PasswordHasher as md5
 
 # Регистрация обычного пользователя
 class CreateUserView(CreateAPIView):
@@ -42,59 +35,33 @@ class AdminRegistration(CreateAPIView):
     serializer_class = AdminSerializer
 
 
-# сам лично писал, нужно оттестировать, ибо могут быть ошибки, ни где в инете гайда нету, кроме как офф. доки, так что могут быть ошибки, требует рефакторинга
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if not is_authenticated(request.user):
-            print('Метод работает1')
-            return False
-        elif request.user.is_staff:
-            print('Метод работает2')
-            return True
-        elif request.method in permissions.SAFE_METHODS:
-            print('Метод работает3')
-            return True
-        else:
-            print('Метод работает4')
-            return False
-
-    def has_object_permission(self, request, view, obj):
-        if request.user.is_staff:
-            return True
-        elif request.method in permissions.SAFE_METHODS:
-            return request.user
-        elif request.user.is_staff == False:
-            return False
-        else:
-            return False
-
-
-# Проверяет собственик записи человек или нет, если нет, доступа нет, если да, доступ есть,так же разрешён полный доступ админу
-class IsOwnerOrCloseOnlyForAdmin(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if obj.UserID == request.user:
-            return obj.UserID == request.user
-        elif request.user.is_staff:
-            return True
-        elif request.method in permissions.SAFE_METHODS:
-            return False
-
-
-
 # Вносить сайты может только админ, пользователи лишь использовать
 class ListCreateSites(generics.ListCreateAPIView):
     queryset = Sites.objects.all()
     serializer_class = SitesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+
+    def perform_create(self, serializer):
+        serializer.save(UserID=self.request.user)
+
+    def get_queryset(self, *args, **kwargs):
+        if self.request.user.is_staff:
+            filter = Sites.objects.all()
+        else:
+            filter = Sites.objects.filter(UserID=self.request.user)
+        return filter
 
 
 # Изменять сайты может только админ, пользователи лишь смотреть
 class ListCreateSite(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sites.objects.all()
     serializer_class = SitesSerializers
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsOwnerOrCloseOnlyForAdmin,)
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+
+    def perform_create(self, serializer):
+        serializer.save(UserID=self.request.user)
 
     def get_queryset(self, *args, **kwargs):
         filter = Sites.objects.filter(ID=self.kwargs['pk'])
@@ -206,12 +173,29 @@ class ListCreatePersonPageRank(generics.RetrieveUpdateDestroyAPIView):
         return filter
 
 
+class UserInfo(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserInfoSerializers
+    permission_classes = (IsOwnerOrCloseOnlyForAdmin,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    lookup_field = 'username'
+
+    def get_queryset(self, *args, **kwargs):
+        filter = User.objects.filter(username = self.request.user)
+        return filter
+
+
 @api_view(['GET',])  
-@permission_classes((IsAuthenticated, ))  
+@permission_classes((IsAuthenticated, ))
 def common_stat(request,site):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
-    persons = Persons.objects.all()
+    if request.user.is_staff:
+        persons = Persons.objects.all()
+    else:
+        try:
+            persons = Persons.objects.filter(UserID=request.user)
+        except:
+            raise serializers.ValidationError('Требуется авторизация')
     if pages and persons:
         for person in persons:
             data[person.Name] = pages.filter(page_id__PersonID=person.pk)\
@@ -228,6 +212,8 @@ def period_stat(request,site,person,date_from,date_to):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
     person = get_object_or_404(Persons,pk=person)
+    if person.UserID != request.user or not request.user.is_staff:
+        return Response (status = status.HTTP_403_FORBIDDEN)
     if not pages:
         return Response (status = status.HTTP_400_BAD_REQUEST)
     pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
@@ -238,7 +224,7 @@ def period_stat(request,site,person,date_from,date_to):
     new_pages = 0
     while date != date_to:
         count = pages_filtred.filter(FoundDateTime__date=date).count()
-        if count: 
+        if count:
             data[date.isoformat()] = count
             new_pages +=count
         date += datetime.timedelta(days=1)
@@ -246,4 +232,31 @@ def period_stat(request,site,person,date_from,date_to):
     return Response(data)
 
 
-
+'''@api_view(['GET',])
+@permission_classes((IsAuthenticated, ))
+def period_stat(request,site,person,date_from,date_to):
+    data = {}
+    pages = Pages.objects.filter(SiteID=site)
+    if request.user.is_staff:
+        person = get_object_or_404(Persons,pk=person)
+    else:
+        try:
+            person = get_object_or_404(Persons, pk=person, UserID=request.user)
+        except:
+            raise serializers.ValidationError('Требуется авторизация')
+    if not pages:
+        return Response (status = status.HTTP_400_BAD_REQUEST)
+    pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
+    date = date_from.split('-')
+    date = datetime.date(int(date[0]),int(date[1]),int(date[2]))
+    date_to = date_to.split('-')
+    date_to = datetime.date(int(date_to[0]),int(date_to[1]),int(date_to[2]))
+    new_pages = 0
+    while date != date_to:
+        count = pages_filtred.filter(FoundDateTime__date=date).count()
+        if count:
+            data[date.isoformat()] = count
+            new_pages +=count
+        date += datetime.timedelta(days=1)
+    data['new_pages'] = new_pages
+    return Response(data)'''

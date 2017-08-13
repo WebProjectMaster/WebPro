@@ -16,7 +16,6 @@ class ObtainAuthToken(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        print(user.is_staff)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key,'adminUser': user.is_staff})
+        return Response({'token': token.key,'admin_user': user.is_staff})
 
