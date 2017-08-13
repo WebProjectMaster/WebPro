@@ -13,6 +13,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
+
 class Sites(models.Model):
     """ Сайты """
 
@@ -21,6 +22,7 @@ class Sites(models.Model):
 
     ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=256)
+    UserID = models.ForeignKey(User, db_column="username", blank=True)
 
     def __str__(self):
         return self.Name
@@ -33,8 +35,8 @@ class Pages(models.Model):
         db_table = "pages"
 
     ID = models.AutoField(primary_key=True)
-    Url = models.URLField("url", max_length=128)
-    Hash_url = models.URLField("hash_url", unique=True, max_length=32)
+    Url = models.URLField("url", unique= True, max_length=254)
+    Hash_url = models.URLField("hash_url",  max_length=254)
     SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
     LastScanDate = models.DateTimeField("last scan date", null=True, blank=True)

@@ -102,3 +102,16 @@ ENV/
 .idea/
 .vscode/
 activate_venv\.bat
+
+
+djangorestapi/project_uwsgi\.ini
+
+djangorestapi/uwsgi_params
+
+djangorestapi/project_nginx\.conf
+
+\.idea/
+
+djangorestapi/djangorestapi/__pycache__/
+
+djangorestapi/restapi/__pycache__/

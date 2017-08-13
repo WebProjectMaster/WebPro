@@ -116,7 +116,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'48474f975022f960bc2afbe49be581e8','2017-07-30 20:49:12.781393',1,'root','','','',1,1,'2017-07-22 23:36:51.774535'),(2,'48474f975022f960bc2afbe49be581e8','2017-07-30 20:24:51.020425',0,'dima','jfj','awalk','wadad@yandex.ru',0,1,'2017-07-24 01:55:37.949785'),(6,'202cb962ac59075b964b07152d234b70','2017-07-24 20:50:39.699103',0,'ddd','awdad','awdad','123213@yandex.ru',0,1,'2017-07-24 20:50:32.227454'),(9,'202cb962ac59075b964b07152d234b70','2017-07-27 23:26:11.369864',0,'dimaroot','wijfjwefop','dima','dabi@yandex.ru',0,1,'2017-07-27 23:25:57.150281'),(10,'202cb962ac59075b964b07152d234b70',NULL,0,'root123','aaa','aaa','aaa@aaa.ru',0,1,'2017-07-27 23:27:28.205053'),(11,'202cb962ac59075b964b07152d234b70','2017-07-27 23:28:50.350378',1,'root1234','aaa','aaa','aaa@aaa.ru',0,1,'2017-07-27 23:28:26.059145'),(12,'202cb962ac59075b964b07152d234b70','2017-07-29 20:49:21.770084',1,'root12345','wijfjwefop','dima','aaa@aaa.ru',1,1,'2017-07-27 23:32:45.108316');
+INSERT INTO `auth_user` VALUES (1,'48474f975022f960bc2afbe49be581e8','2017-08-12 20:27:26.066838',1,'root','','','',1,1,'2017-07-22 23:36:51.774535'),(2,'48474f975022f960bc2afbe49be581e8','2017-08-12 21:00:46.922643',0,'dima','jfj','awalk','wadad@yandex.ru',0,1,'2017-07-24 01:55:37.949785'),(6,'202cb962ac59075b964b07152d234b70','2017-07-24 20:50:39.699103',0,'ddd','awdad','awdad','123213@yandex.ru',0,1,'2017-07-24 20:50:32.227454'),(9,'202cb962ac59075b964b07152d234b70','2017-07-27 23:26:11.369864',0,'dimaroot','wijfjwefop','dima','dabi@yandex.ru',0,1,'2017-07-27 23:25:57.150281'),(10,'202cb962ac59075b964b07152d234b70',NULL,0,'root123','aaa','aaa','aaa@aaa.ru',0,1,'2017-07-27 23:27:28.205053'),(11,'202cb962ac59075b964b07152d234b70','2017-07-27 23:28:50.350378',1,'root1234','aaa','aaa','aaa@aaa.ru',0,1,'2017-07-27 23:28:26.059145'),(12,'202cb962ac59075b964b07152d234b70','2017-08-08 19:49:38.231640',1,'root12345','wijfjwefop','dima','aaa@aaa.ru',1,1,'2017-07-27 23:32:45.108316'),(13,'202cb962ac59075b964b07152d234b70',NULL,0,'awdad','awda','adawda','adwa@yandex.ru',0,1,'2017-08-06 21:51:16.776170'),(14,'202cb962ac59075b964b07152d234b70',NULL,0,'awdad23','awda','adawda','adwa2323@yandex.ru',0,1,'2017-08-06 21:52:47.816705');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,7 +208,7 @@ CREATE TABLE `authtoken_token` (
 
 LOCK TABLES `authtoken_token` WRITE;
 /*!40000 ALTER TABLE `authtoken_token` DISABLE KEYS */;
-INSERT INTO `authtoken_token` VALUES ('bdf8d2d8196727d16894c32507a1bbcbba27cdaa','2017-07-31 08:26:48.565618',1);
+INSERT INTO `authtoken_token` VALUES ('09e169d268da3626002ee68e4b50a36802110b61','2017-08-06 21:51:16.787695',13),('0a4968665cf590d3ce8ff7f3ecb8bb79ed677113','2017-08-07 21:15:51.920696',2),('ac01d8293c84e7cf44864b5bed443c08046607e7','2017-08-06 21:52:47.821712',14),('bdf8d2d8196727d16894c32507a1bbcbba27cdaa','2017-07-31 08:26:48.565618',1);
 /*!40000 ALTER TABLE `authtoken_token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,7 +285,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,7 +294,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2017-07-22 23:32:37.791057'),(2,'auth','0001_initial','2017-07-22 23:32:38.458630'),(3,'admin','0001_initial','2017-07-22 23:32:38.613706'),(4,'admin','0002_logentry_remove_auto_add','2017-07-22 23:32:38.626718'),(5,'contenttypes','0002_remove_content_type_name','2017-07-22 23:32:38.732794'),(6,'auth','0002_alter_permission_name_max_length','2017-07-22 23:32:38.787174'),(7,'auth','0003_alter_user_email_max_length','2017-07-22 23:32:38.853207'),(8,'auth','0004_alter_user_username_opts','2017-07-22 23:32:38.868130'),(9,'auth','0005_alter_user_last_login_null','2017-07-22 23:32:38.924172'),(10,'auth','0006_require_contenttypes_0002','2017-07-22 23:32:38.929161'),(11,'auth','0007_alter_validators_add_error_messages','2017-07-22 23:32:38.943174'),(12,'auth','0008_alter_user_username_max_length','2017-07-22 23:32:39.019171'),(13,'sessions','0001_initial','2017-07-22 23:32:39.060214'),(14,'restapi','0001_initial','2017-07-23 22:29:39.530944'),(15,'authtoken','0001_initial','2017-07-24 00:32:16.111078'),(16,'authtoken','0002_auto_20160226_1747','2017-07-24 00:32:16.224164'),(17,'restapi','0002_auto_20170728_0058','2017-07-27 21:58:15.705589'),(18,'restapi','0003_persons_user','2017-07-27 23:54:46.746848'),(19,'restapi','0004_auto_20170728_0254','2017-07-27 23:54:46.769871'),(20,'restapi','0005_keywords_userid','2017-07-28 12:41:51.252145'),(21,'restapi','0006_auto_20170728_1617','2017-07-28 13:18:04.970484'),(22,'restapi','0007_auto_20170728_1619','2017-07-28 13:19:33.028033');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2017-07-22 23:32:37.791057'),(2,'auth','0001_initial','2017-07-22 23:32:38.458630'),(3,'admin','0001_initial','2017-07-22 23:32:38.613706'),(4,'admin','0002_logentry_remove_auto_add','2017-07-22 23:32:38.626718'),(5,'contenttypes','0002_remove_content_type_name','2017-07-22 23:32:38.732794'),(6,'auth','0002_alter_permission_name_max_length','2017-07-22 23:32:38.787174'),(7,'auth','0003_alter_user_email_max_length','2017-07-22 23:32:38.853207'),(8,'auth','0004_alter_user_username_opts','2017-07-22 23:32:38.868130'),(9,'auth','0005_alter_user_last_login_null','2017-07-22 23:32:38.924172'),(10,'auth','0006_require_contenttypes_0002','2017-07-22 23:32:38.929161'),(11,'auth','0007_alter_validators_add_error_messages','2017-07-22 23:32:38.943174'),(12,'auth','0008_alter_user_username_max_length','2017-07-22 23:32:39.019171'),(13,'sessions','0001_initial','2017-07-22 23:32:39.060214'),(14,'restapi','0001_initial','2017-07-23 22:29:39.530944'),(15,'authtoken','0001_initial','2017-07-24 00:32:16.111078'),(16,'authtoken','0002_auto_20160226_1747','2017-07-24 00:32:16.224164'),(17,'restapi','0002_auto_20170728_0058','2017-07-27 21:58:15.705589'),(18,'restapi','0003_persons_user','2017-07-27 23:54:46.746848'),(19,'restapi','0004_auto_20170728_0254','2017-07-27 23:54:46.769871'),(20,'restapi','0005_keywords_userid','2017-07-28 12:41:51.252145'),(21,'restapi','0006_auto_20170728_1617','2017-07-28 13:18:04.970484'),(22,'restapi','0007_auto_20170728_1619','2017-07-28 13:19:33.028033'),(23,'restapi','0008_auto_20170812_2353','2017-08-12 20:53:48.502854');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -320,7 +320,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('7j7p12wi013ladk6xeqnzrfxjnyqcd1y','OWNhZGUxMDNjNWMzYTg3Y2NlMTkxNmY1Mzc1Mjc1ODBiM2ExN2E3Yzp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEiLCJfYXV0aF91c2VyX2hhc2giOiIwYjg3YTI1N2IyNmE1MWE4NDMwMTBmZWM4MTlkNDM5Njk0MWI0MzUzIn0=','2017-08-13 20:49:12.791403'),('tw3j9d7fds5hg8g840kvb4v119u7x3zv','ZDAzNjAyMjViNjMxNjdmM2RiYzJhNDBhZTcyYzk3ZDc2NGRlMTVlZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBiODdhMjU3YjI2YTUxYTg0MzAxMGZlYzgxOWQ0Mzk2OTQxYjQzNTMiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2017-08-07 20:51:19.781671');
+INSERT INTO `django_session` VALUES ('m9zvqdhpi8pymr33hd8mxlsipo4tqh38','NDAxY2U1ZGY3OThlZjAxOTQzZTA3Njg1MTliNTExOTgxNjFkYTlhNTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiMGI4N2EyNTdiMjZhNTFhODQzMDEwZmVjODE5ZDQzOTY5NDFiNDM1MyIsIl9hdXRoX3VzZXJfaWQiOiIyIn0=','2017-08-26 21:00:46.927526'),('tw3j9d7fds5hg8g840kvb4v119u7x3zv','ZDAzNjAyMjViNjMxNjdmM2RiYzJhNDBhZTcyYzk3ZDc2NGRlMTVlZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBiODdhMjU3YjI2YTUxYTg0MzAxMGZlYzgxOWQ0Mzk2OTQxYjQzNTMiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2017-08-07 20:51:19.781671');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -341,7 +341,7 @@ CREATE TABLE `keywords` (
   KEY `keywords_username_69f8566e_fk_auth_user_id` (`username`),
   CONSTRAINT `keywords_PersonID_82615095_fk_persons_ID` FOREIGN KEY (`PersonID`) REFERENCES `persons` (`ID`),
   CONSTRAINT `keywords_username_69f8566e_fk_auth_user_id` FOREIGN KEY (`username`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -350,7 +350,7 @@ CREATE TABLE `keywords` (
 
 LOCK TABLES `keywords` WRITE;
 /*!40000 ALTER TABLE `keywords` DISABLE KEYS */;
-INSERT INTO `keywords` VALUES (1,'Дима',1,1),(2,'awdwad',1,12),(3,'afwfwf',2,12),(4,'afwfwf',2,12),(5,'213',1,2),(6,'213',1,2),(7,'213',1,2);
+INSERT INTO `keywords` VALUES (3,'afwfwf',2,12),(4,'afwfwf',2,12);
 /*!40000 ALTER TABLE `keywords` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -372,7 +372,7 @@ CREATE TABLE `pages` (
   UNIQUE KEY `Hash_url` (`Hash_url`),
   KEY `pages_SiteID_98e9f259_fk_sites_ID` (`SiteID`),
   CONSTRAINT `pages_SiteID_98e9f259_fk_sites_ID` FOREIGN KEY (`SiteID`) REFERENCES `sites` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,6 +381,7 @@ CREATE TABLE `pages` (
 
 LOCK TABLES `pages` WRITE;
 /*!40000 ALTER TABLE `pages` DISABLE KEYS */;
+INSERT INTO `pages` VALUES (1,'https://server.com/url/','2017-01-01 00:00:00.000000','2017-01-01 00:00:00.000000',1,'');
 /*!40000 ALTER TABLE `pages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,11 +399,11 @@ CREATE TABLE `person_page_rank` (
   `PersonID` int(11) NOT NULL,
   `Scan_date_datetime` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `person_page_rank_PageID_d0ea7ac6_fk_pages_ID` (`PageID`),
   KEY `person_page_rank_PersonID_e5138c65_fk_persons_ID` (`PersonID`),
+  KEY `person_page_rank_PageID_d0ea7ac6_fk_pages_ID` (`PageID`),
   CONSTRAINT `person_page_rank_PageID_d0ea7ac6_fk_pages_ID` FOREIGN KEY (`PageID`) REFERENCES `pages` (`ID`),
   CONSTRAINT `person_page_rank_PersonID_e5138c65_fk_persons_ID` FOREIGN KEY (`PersonID`) REFERENCES `persons` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -411,6 +412,7 @@ CREATE TABLE `person_page_rank` (
 
 LOCK TABLES `person_page_rank` WRITE;
 /*!40000 ALTER TABLE `person_page_rank` DISABLE KEYS */;
+INSERT INTO `person_page_rank` VALUES (1,2,1,2,NULL),(2,3,1,5,NULL),(3,3,1,8,NULL),(4,2,1,8,'2017-01-02 00:01:00.000000'),(5,4,1,8,'2017-01-03 00:01:00.000000');
 /*!40000 ALTER TABLE `person_page_rank` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,7 +439,7 @@ CREATE TABLE `persons` (
 
 LOCK TABLES `persons` WRITE;
 /*!40000 ALTER TABLE `persons` DISABLE KEYS */;
-INSERT INTO `persons` VALUES (1,'dima',1),(2,'nikita',1),(3,'nikita',1),(4,'Nik',1),(5,'lol',1),(6,'123',12),(7,'kto-to',12),(8,'Python',2);
+INSERT INTO `persons` VALUES (2,'nikita',1),(3,'nikita',1),(4,'Nik',1),(5,'lol',1),(6,'123',12),(7,'kto-to',12),(8,'Python',2);
 /*!40000 ALTER TABLE `persons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,7 +453,10 @@ DROP TABLE IF EXISTS `sites`;
 CREATE TABLE `sites` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(256) NOT NULL,
-  PRIMARY KEY (`ID`)
+  `username` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `sites_username_2c24f8d3_fk_auth_user_id` (`username`),
+  CONSTRAINT `sites_username_2c24f8d3_fk_auth_user_id` FOREIGN KEY (`username`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -461,7 +466,7 @@ CREATE TABLE `sites` (
 
 LOCK TABLES `sites` WRITE;
 /*!40000 ALTER TABLE `sites` DISABLE KEYS */;
-INSERT INTO `sites` VALUES (1,'server.com'),(2,'server2.com');
+INSERT INTO `sites` VALUES (1,'server.com',1),(2,'server2.com',1);
 /*!40000 ALTER TABLE `sites` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -482,4 +487,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-31 23:51:27
+-- Dump completed on 2017-08-13  0:15:04
