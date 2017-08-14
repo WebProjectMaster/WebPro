@@ -1,5 +1,9 @@
 from urllib.robotparser import RobotFileParser
 from urllib.parse import unquote
+import time
+import logging
+# import database
+import sitemap
 
 
 class RobotsTxt(RobotFileParser):
@@ -23,3 +27,20 @@ class RobotsTxt(RobotFileParser):
                     sitemaps.add(line[1])
         self.__sitemaps = list(sitemaps)
         super().parse(lines)
+
+
+def process_robots(robots_url):
+    """
+        Производит обработку файлов robots.txt
+        - добавляет в базу новые файлы robots
+        - создает объекты из файла robots.txt,
+            которые умеют проверять ссылки и содежрат sitemaps
+        - возвращает RobotsTxt
+    """
+    robots_file = RobotsTxt(robots_url)
+    robots_file.read()
+    return robots_file
+
+
+def _is_robot_txt(url):
+    return url.upper().endswith('ROBOTS.TXT')

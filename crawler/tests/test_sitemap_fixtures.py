@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture
 def site_url():
     return 'https://yandex.ru'
