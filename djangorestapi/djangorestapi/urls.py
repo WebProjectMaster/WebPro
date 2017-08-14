@@ -1,13 +1,14 @@
 from django.conf.urls import url
 from django.contrib import admin
-from restapi.views import *
-from restapi.authtoken import *
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import  include, url
 
+from restapi.views import *
+from restapi.authtoken import *
+
 from rest_framework.authtoken import views
+import djoser.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -38,6 +39,10 @@ urlpatterns = [
     url(r'^api/registration-admin/', AdminRegistration.as_view(), name='registration_admin'),
 
     url(r'^api/user/(?P<username>\w+)$', UserInfo.as_view(), name = 'user_info'),
+
+    url(r'^api/auth2/', include('djoser.urls.authtoken')),
+    url(r'^api/auth2/password/reset', djoser.views.PasswordResetView.as_view()),
+    url(r'^api/auth2/password/reset/confirm', djoser.views.PasswordResetConfirmView.as_view()),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
