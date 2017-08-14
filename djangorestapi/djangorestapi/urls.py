@@ -40,9 +40,10 @@ urlpatterns = [
 
     url(r'^api/user/(?P<username>\w+)$', UserInfo.as_view(), name = 'user_info'),
 
-    url(r'^api/auth2/', include('djoser.urls.authtoken')),
-    url(r'^api/auth2/password/reset', djoser.views.PasswordResetView.as_view()),
-    url(r'^api/auth2/password/reset/confirm', djoser.views.PasswordResetConfirmView.as_view()),
+    url(r'^api/auth2/$', include('djoser.urls.authtoken')),
+    url(r'^api/auth2/password/reset/$', djoser.views.PasswordResetView.as_view()),
+    url(r'^api/auth2/password/reset/confirm/$', djoser.views.PasswordResetConfirmView.as_view()),
+    url(r'^api/auth2/password/reset/confirm/(?P<uid>.*)/(?P<token>.*)', password_reset_confirm, name='password_reset_confirm'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -232,6 +232,17 @@ def period_stat(request,site,person,date_from,date_to):
     return Response(data)
 
 
+@api_view(['GET',])
+@permission_classes([])
+def password_reset_confirm(request, uid, token):
+    payload = {
+        "uid": uid,
+        "token": token
+    }
+
+    return render(request, 'restapi/password_reset_confirm.html', payload)
+
+
 '''@api_view(['GET',])
 @permission_classes((IsAuthenticated, ))
 def period_stat(request,site,person,date_from,date_to):
@@ -260,3 +271,5 @@ def period_stat(request,site,person,date_from,date_to):
         date += datetime.timedelta(days=1)
     data['new_pages'] = new_pages
     return Response(data)'''
+
+
