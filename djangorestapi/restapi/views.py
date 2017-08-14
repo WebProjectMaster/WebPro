@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import authentication_classes
 from rest_framework import generics
 from .serializers import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
@@ -208,12 +209,13 @@ def common_stat(request,site):
 
 @api_view(['GET',])
 @permission_classes((IsAuthenticated, ))
+@authentication_classes((SessionAuthentication, BasicAuthentication, TokenAuthentication))
 def period_stat(request,site,person,date_from,date_to):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
     person = get_object_or_404(Persons,pk=person)
     if person.UserID != request.user or not request.user.is_staff:
-        return Response (status = status.HTTP_403_FORBIDDEN)
+        raise serializers.ValidationError('Нет нужных прав доступа')
     if not pages:
         return Response (status = status.HTTP_400_BAD_REQUEST)
     pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
