@@ -7,16 +7,12 @@ from rest_framework.compat import is_authenticated
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not is_authenticated(request.user):
-           # print('Метод работает1')
             return False
         elif request.user.is_staff:
-           # print('Метод работает2')
             return True
         elif request.method in permissions.SAFE_METHODS:
-          #  print('Метод работает3')
             return True
         else:
-          #  print('Метод работает4')
             return False
 
     def has_object_permission(self, request, view, obj):

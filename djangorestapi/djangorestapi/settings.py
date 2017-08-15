@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qpc-)ep)6m%db1utmk11l3qi8^3@s&_&^+c8k$6wuxq4d0a$d5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-#ALLOWED_HOSTS = ['94.130.27.143']
+ALLOWED_HOSTS = ['94.130.27.143']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'djoser',
     'restapi',
 ]
 
@@ -85,6 +86,17 @@ DATABASES = {
     }
 }
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_PORT = '25'
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_TIMEOUT = 10000
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -128,33 +140,52 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
     )
 }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-''' STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
-MEDIA_URL = '/media/' '''
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS  = [os.path.join(BASE_DIR , 'static')]
-
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+''' STATIC_URL = '/static/'
+STATICFILES_DIRS  = [os.path.join(BASE_DIR , 'static')]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')'''
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
 
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'api/auth2/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {},
+}
+
 # импортируем настройки для разработки из файла "settings_dev.py"
 # из того же каталога, что и файл настроек (возможна перезапись текущих!)
 
+# pylint: disable=import-error, wildcard-import, unused-wildcard-import, bare-except
 if DEBUG and os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                          'settings_dev.py')):
-    # pylint: disable=import-error, wildcard-import, unused-wildcard-import
-    from .settings_dev import *
-    # pylint: enable=all
+    try:
+        from .settings_dev import *
+    except:
+        pass
+
+# Настройки электронной почты загружаем из закрытого источника
+if os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'settings_email.py')):
+    try:
+        from .settings_email import *
+    except:
+        pass
+
+# pylint: enable=all

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import authentication_classes
 from rest_framework import generics
 from .serializers import *
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
@@ -15,7 +16,6 @@ from django.db.models import Q
 import datetime
 from .permission import *
 # Create your views here.
-from django.contrib.auth.hashers import  UnsaltedMD5PasswordHasher as md5
 
 # Регистрация обычного пользователя
 class CreateUserView(CreateAPIView):
@@ -208,22 +208,23 @@ def common_stat(request,site):
 
 @api_view(['GET',])
 @permission_classes((IsAuthenticated, ))
+@authentication_classes((SessionAuthentication, BasicAuthentication, TokenAuthentication))
 def period_stat(request,site,person,date_from,date_to):
     data = {}
     pages = Pages.objects.filter(SiteID=site)
     person = get_object_or_404(Persons,pk=person)
     if person.UserID != request.user or not request.user.is_staff:
-        return Response (status = status.HTTP_403_FORBIDDEN)
+        raise serializers.ValidationError('Нет нужных прав доступа')
     if not pages:
         return Response (status = status.HTTP_400_BAD_REQUEST)
     pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
     date = date_from.split('-')
-    date = datetime.date(int(date[0]),int(date[1]),int(date[2]))
+    date = datetime.datetime(int(date[0]),int(date[1]),int(date[2]))
     date_to = date_to.split('-')
-    date_to = datetime.date(int(date_to[0]),int(date_to[1]),int(date_to[2]))
+    date_to = datetime.datetime(int(date_to[0]),int(date_to[1]),int(date_to[2]))
     new_pages = 0
     while date != date_to:
-        count = pages_filtred.filter(FoundDateTime__date=date).count()
+        count = pages_filtred.filter(FoundDateTime__range=(date,date+datetime.timedelta(hours=23,minutes=59))).count()
         if count:
             data[date.isoformat()] = count
             new_pages +=count
@@ -232,31 +233,16 @@ def period_stat(request,site,person,date_from,date_to):
     return Response(data)
 
 
-'''@api_view(['GET',])
-@permission_classes((IsAuthenticated, ))
-def period_stat(request,site,person,date_from,date_to):
-    data = {}
-    pages = Pages.objects.filter(SiteID=site)
-    if request.user.is_staff:
-        person = get_object_or_404(Persons,pk=person)
-    else:
-        try:
-            person = get_object_or_404(Persons, pk=person, UserID=request.user)
-        except:
-            raise serializers.ValidationError('Требуется авторизация')
-    if not pages:
-        return Response (status = status.HTTP_400_BAD_REQUEST)
-    pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
-    date = date_from.split('-')
-    date = datetime.date(int(date[0]),int(date[1]),int(date[2]))
-    date_to = date_to.split('-')
-    date_to = datetime.date(int(date_to[0]),int(date_to[1]),int(date_to[2]))
-    new_pages = 0
-    while date != date_to:
-        count = pages_filtred.filter(FoundDateTime__date=date).count()
-        if count:
-            data[date.isoformat()] = count
-            new_pages +=count
-        date += datetime.timedelta(days=1)
-    data['new_pages'] = new_pages
-    return Response(data)'''
+@api_view(['GET',])
+@permission_classes([])
+@authentication_classes((SessionAuthentication, BasicAuthentication, TokenAuthentication))
+def password_reset_confirm(request, uid, token):
+    payload = {
+        "uid": uid,
+        "token": token
+    }
+
+    return render(request, 'restapi/password_reset_confirm.html', payload)
+
+
+
