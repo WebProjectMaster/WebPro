@@ -172,8 +172,20 @@ DJOSER = {
 # импортируем настройки для разработки из файла "settings_dev.py"
 # из того же каталога, что и файл настроек (возможна перезапись текущих!)
 
+# pylint: disable=import-error, wildcard-import, unused-wildcard-import, bare-except
 if DEBUG and os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                          'settings_dev.py')):
-    # pylint: disable=import-error, wildcard-import, unused-wildcard-import
-    from .settings_dev import *
-    # pylint: enable=all
+    try:
+        from .settings_dev import *
+    except:
+        pass
+
+# Настройки электронной почты загружаем из закрытого источника
+if os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               'settings_email.py')):
+    try:
+        from .settings_email import *
+    except:
+        pass
+
+# pylint: enable=all
