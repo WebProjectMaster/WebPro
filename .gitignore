@@ -115,3 +115,9 @@ djangorestapi/project_nginx\.conf
 djangorestapi/djangorestapi/__pycache__/
 
 djangorestapi/restapi/__pycache__/
+
+djangorestapi/project_nginx\.conf
+
+djangorestapi/project_uwsgi\.ini
+
+djangorestapi/uwsgi_params

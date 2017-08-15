@@ -22,6 +22,7 @@
 LOCK TABLES `keywords` WRITE;
 /*!40000 ALTER TABLE `keywords` DISABLE KEYS */;
 INSERT INTO `keywords` VALUES (1,'Путин',1),(2,'Путина',1),(3,'Путину',1);
+INSERT INTO `keywords` VALUES (4,'Трамп',3),(5,'Трампу',3),(6,'Трампа',3);
 /*!40000 ALTER TABLE `keywords` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
