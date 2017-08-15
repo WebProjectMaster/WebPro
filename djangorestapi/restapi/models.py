@@ -35,8 +35,8 @@ class Pages(models.Model):
         db_table = "pages"
 
     ID = models.AutoField(primary_key=True)
-    Url = models.URLField("url", unique= True, max_length=254)
-    Hash_url = models.URLField("hash_url",  max_length=254)
+    Url = models.URLField("url", max_length=128)
+    Hash_url = models.URLField("hash_url", unique=True, max_length=64)
     SiteID = models.ForeignKey(Sites, db_column="SiteID")
     FoundDateTime = models.DateTimeField("date found")
     LastScanDate = models.DateTimeField("last scan date", null=True, blank=True)

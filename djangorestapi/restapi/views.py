@@ -16,7 +16,6 @@ from django.db.models import Q
 import datetime
 from .permission import *
 # Create your views here.
-from django.contrib.auth.hashers import  UnsaltedMD5PasswordHasher as md5
 
 # Регистрация обычного пользователя
 class CreateUserView(CreateAPIView):
@@ -236,6 +235,7 @@ def period_stat(request,site,person,date_from,date_to):
 
 @api_view(['GET',])
 @permission_classes([])
+@authentication_classes((SessionAuthentication, BasicAuthentication, TokenAuthentication))
 def password_reset_confirm(request, uid, token):
     payload = {
         "uid": uid,
@@ -244,34 +244,5 @@ def password_reset_confirm(request, uid, token):
 
     return render(request, 'restapi/password_reset_confirm.html', payload)
 
-
-'''@api_view(['GET',])
-@permission_classes((IsAuthenticated, ))
-def period_stat(request,site,person,date_from,date_to):
-    data = {}
-    pages = Pages.objects.filter(SiteID=site)
-    if request.user.is_staff:
-        person = get_object_or_404(Persons,pk=person)
-    else:
-        try:
-            person = get_object_or_404(Persons, pk=person, UserID=request.user)
-        except:
-            raise serializers.ValidationError('Требуется авторизация')
-    if not pages:
-        return Response (status = status.HTTP_400_BAD_REQUEST)
-    pages_filtred = pages.filter(page_id__PersonID=person.pk).filter(FoundDateTime__range=(date_from,date_to))
-    date = date_from.split('-')
-    date = datetime.date(int(date[0]),int(date[1]),int(date[2]))
-    date_to = date_to.split('-')
-    date_to = datetime.date(int(date_to[0]),int(date_to[1]),int(date_to[2]))
-    new_pages = 0
-    while date != date_to:
-        count = pages_filtred.filter(FoundDateTime__date=date).count()
-        if count:
-            data[date.isoformat()] = count
-            new_pages +=count
-        date += datetime.timedelta(days=1)
-    data['new_pages'] = new_pages
-    return Response(data)'''
 
 
