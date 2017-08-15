@@ -4,6 +4,7 @@ import re
 import logging
 from lxml import etree
 from collections import Counter
+# import database
 from log import log_with
 from sitemap import get_file_type, SM_TYPE_HTML
 
@@ -68,3 +69,12 @@ def parse_html(page_content, words_dict):
 
     logging.debug('parse_html %s completed...', result)
     return result
+
+
+def process_ranks(content, page_id, keywords):
+    # logging.info('process_ranks: %s', content)
+    ranks = parse_html(content, keywords)
+    logging.info('process_ranks: %s', ranks)
+    # database.update_person_page_rank(page_id, ranks)
+    # database.update_last_scan_date(page_id)
+    return ranks, page_id

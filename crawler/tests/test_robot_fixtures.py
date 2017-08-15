@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture
 def list_ya_sitemaps():
     return [

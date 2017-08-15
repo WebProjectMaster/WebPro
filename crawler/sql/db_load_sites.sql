@@ -21,7 +21,7 @@
 
 LOCK TABLES `sites` WRITE;
 /*!40000 ALTER TABLE `sites` DISABLE KEYS */;
-INSERT INTO `sites` VALUES (1,'https://news.mail.ru'),(2,'https://news.yandex.ru');
+INSERT INTO `sites` VALUES (1,'http://lenta.ru'),(2,'https://news.yandex.ru');
 /*!40000 ALTER TABLE `sites` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

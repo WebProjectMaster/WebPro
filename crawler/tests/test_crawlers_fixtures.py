@@ -22,17 +22,12 @@ def executeScriptsFromFile(filename, db):
             c.execute(command)
             # logging.info('executeScriptsFromFile command: %s', command)
         except Exception as msg:
-            logging.error("Command skipped: ", msg)
+            logging.error("Command skipped: %s", msg)
     c.close()
 
-@pytest.fixture
-def test_db():
-    database.db = MySQLdb.connect(**settings.TEST_DATABASE)
-    return database.db
 
 def clean_test_db():
-    database.db = MySQLdb.connect(**settings.TEST_DATABASE)
-    db = database.db
+    db = MySQLdb.connect(**settings.TEST_DATABASE)
     executeScriptsFromFile("./sql/db_init_mysql.sql", db)
     executeScriptsFromFile("./sql/db_load_sites.sql", db)
     executeScriptsFromFile("./sql/db_load_persons.sql", db)

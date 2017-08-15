@@ -1,17 +1,10 @@
 #!/usr/bin/python3
 
 import time
-import random
-import multiprocessing as mp
 import logging
 import settings
-# import sqlite3
-
-# import Robot from Robot
-import sitemap
-from crawlers import Crawler
-
+import crawler
 
 if __name__ == '__main__':
-    c = Crawler(max_limit=10)
-    c.scan()
+    logging.basicConfig(filename=settings.LOG_FILE, level=logging.DEBUG, format='%(asctime)s %(message)s')
+    crawler.scan(max_limit=10)
