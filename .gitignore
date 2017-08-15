@@ -102,3 +102,9 @@ ENV/
 .idea/
 .vscode/
 activate_venv\.bat
+
+djangorestapi/project_nginx\.conf
+
+djangorestapi/project_uwsgi\.ini
+
+djangorestapi/uwsgi_params
